@@ -4,12 +4,18 @@ import csv
 from secret import API_KEY
 
 
-def main():
-    print("What is the numerical SeatGeek ID for the event you would like to track?")
-    event_id = int(input())
+def user_id_input():
     with open("user_input.txt", mode='w+') as user_input:
-        user_input.write(str(event_id))
+        user_input.write(input() + "\n")
 
+    current_input = input()
+    with open("user_input.txt", mode='a+') as user_input:
+        while current_input != "DONE":
+            user_input.write(current_input + "\n")
+            current_input = input()
+
+
+def csv_init(event_id):
     params = (
         ('client_id', API_KEY),
     )
@@ -27,7 +33,18 @@ def main():
             ['Access Date', 'Announce Date', 'Event Date', 'Event ID', 'Listing Count', 'Lowest Price', 'Median Price',
              'Average Price', 'Highest Price', 'Title'])
 
-    print("CSV initialized. To update this file with current ticket data, run 'pricetracker.py'.")
+
+def main():
+    print("What is the numerical SeatGeek ID for the event(s) you would like to track? "
+          "(type DONE when finished entering events)")
+
+    user_id_input()
+
+    with open("user_input.txt", mode='r') as user_input:
+        for line in enumerate(user_input):
+            csv_init(int(line[1]))
+
+    print("CSV(s) initialized. To update with current ticket data, run 'pricetracker.py'.")
 
 
 if __name__ == "__main__":
