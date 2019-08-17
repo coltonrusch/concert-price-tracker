@@ -32,7 +32,7 @@ def update_csv(event_id):
     highest_price = json_data['stats']['highest_price']
     announce_date = json_data['announce_date']
     event_time = json_data['datetime_local']
-    current_time = datetime.datetime.utcnow().isoformat()[:-4]
+    current_time = datetime.datetime.utcnow().replace(microsecond=0).isoformat()[:-4]
 
     # updates an event's CSV with the relevant data, given that the event's CSV has been initialized by init.py
     if os.path.exists(data_dir + title + " " + str(event_id) + ".csv"):
