@@ -2,8 +2,8 @@ import requests
 import json
 import csv
 import os
-from secret import API_KEY
-from secret import data_dir
+from secret import API_KEY      # string - SeatGeek API key is hidden
+from secret import data_dir     # string - unique to the user, format: 'D:\\Users\\myName\\pricetracker\\data\\'
 
 
 def currently_tracking():

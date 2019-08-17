@@ -3,8 +3,8 @@ import json
 import datetime
 import csv
 import os
-from secret import API_KEY
-from secret import data_dir
+from secret import API_KEY      # string - SeatGeek API key is hidden
+from secret import data_dir     # string - unique to the user, format: 'D:\\Users\\myName\\pricetracker\\data\\'
 
 
 def update_csv(event_id):
@@ -24,13 +24,12 @@ def update_csv(event_id):
         json.dump(json_data, outfile)
 
     # relevant data extracted from the json file
-    stats = json_data['stats']
     title = json_data['title']
-    listing_count = stats['listing_count']
-    lowest_price = stats['lowest_price']
+    listing_count = json_data['stats']['listing_count']
+    lowest_price = json_data['stats']['lowest_price']
     median_price = json_data['stats']['median_price']
-    average_price = stats['average_price']
-    highest_price = stats['highest_price']
+    average_price = json_data['stats']['average_price']
+    highest_price = json_data['stats']['highest_price']
     announce_date = json_data['announce_date']
     event_time = json_data['datetime_local']
     current_time = datetime.datetime.utcnow().isoformat()[:-4]
