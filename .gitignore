@@ -128,3 +128,6 @@ dmypy.json
 
 # folder for CSVs and cache
 data/
+
+# secret.py - holds API_KEY and directory
+secret.py
