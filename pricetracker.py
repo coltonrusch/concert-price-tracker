@@ -1,10 +1,25 @@
-import requests
 import json
 import datetime
 import csv
 import os
+import requests
 from secret import API_KEY      # string - SeatGeek API key is hidden
 from secret import data_dir     # string - unique to the user, format: 'D:\\Users\\myName\\pricetracker\\data\\'
+import init
+
+
+def get_stats(json_data):
+    """
+    takes json_data and extracts the relevant statistics from the data; returns a dictionary containing these stats
+    :param json_data: json data obtained from SeatGeek API call for the given event
+    :return: dictionary containing the relevant event ticket pricing statistics
+    """
+    stats = {'title': json_data['title'], 'listing_count': json_data['listing count'],
+             'lowest_price': json_data['stats']['lowest_price'], 'median_price': json_data['stats']['median_price'],
+             'average_price': json_data['stats']['average_price'], 'highest_price': json_data['stats']['highest_price'],
+             'announce_date': json_data['announce_date'], 'event_time': json_data['datetime_local'],
+             'current_time': datetime.datetime.utcnow().isoformat()[:-4]}
+    return stats
 
 
 def update_csv(event_id):
@@ -24,15 +39,8 @@ def update_csv(event_id):
         json.dump(json_data, outfile)
 
     # relevant data extracted from the json file
-    title = json_data['title']
-    listing_count = json_data['stats']['listing_count']
-    lowest_price = json_data['stats']['lowest_price']
-    median_price = json_data['stats']['median_price']
-    average_price = json_data['stats']['average_price']
-    highest_price = json_data['stats']['highest_price']
-    announce_date = json_data['announce_date']
-    event_time = json_data['datetime_local']
-    current_time = datetime.datetime.utcnow().isoformat()[:-4]
+    stats = get_stats(json_data)
+    title = stats['title']
 
     # updates an event's CSV with the relevant data, given that the event's CSV has been initialized by init.py
     if os.path.exists(data_dir + title + " " + str(event_id) + ".csv"):
@@ -40,10 +48,11 @@ def update_csv(event_id):
         with open(data_dir + title + " " + str(event_id) + ".csv", mode='a+', newline='') as concert_file:
             concert_writer = csv.writer(concert_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             concert_writer.writerow(
-                [current_time, announce_date, event_time, event_id, listing_count, lowest_price, median_price,
-                 average_price, highest_price, title])
+                [stats['current_time'], stats['announce_date'], stats['event_time'], event_id, stats['listing_count'],
+                 stats['lowest_price'], stats['median_price'], stats['average_price'], stats['highest_price'], title])
     else:
-        print("File '" + title + " " + str(event_id) + ".csv' has not been initialized, and will not be updated.")
+        print("File '" + title + " " + str(event_id) + ".csv' has not yet been initialized.")
+        init.csv_init(event_id)
 
 
 def main():

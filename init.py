@@ -1,7 +1,7 @@
-import requests
 import json
 import csv
 import os
+import requests
 from secret import API_KEY      # string - SeatGeek API key is hidden
 from secret import data_dir     # string - unique to the user, format: 'D:\\Users\\myName\\pricetracker\\data\\'
 
@@ -47,13 +47,10 @@ def new_or_old(user_response):
     while True:
         if user_response == '1':
             return False
-            break
-        elif user_response == '2':
+        if user_response == '2':
             return True
-            break
-        else:
-            print("Invalid response. Please type '1' for the former, and '2' for the latter.")
-            break
+        print("Invalid response. Please type '1' for the former, and '2' for the latter.")
+        break
 
 
 def user_id_input(new):
