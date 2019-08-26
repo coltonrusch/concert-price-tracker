@@ -14,7 +14,7 @@ def get_stats(json_data):
     :param json_data: json data obtained from SeatGeek API call for the given event
     :return: dictionary containing the relevant event ticket pricing statistics
     """
-    stats = {'title': json_data['title'], 'listing_count': json_data['listing count'],
+    stats = {'title': json_data['title'], 'listing_count': json_data['stats']['listing_count'],
              'lowest_price': json_data['stats']['lowest_price'], 'median_price': json_data['stats']['median_price'],
              'average_price': json_data['stats']['average_price'], 'highest_price': json_data['stats']['highest_price'],
              'announce_date': json_data['announce_date'], 'event_time': json_data['datetime_local'],
